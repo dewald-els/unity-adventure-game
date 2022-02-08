@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Collision")]
     [SerializeField] private float _groundRaycastLength;
+    [SerializeField] private float _groundRaycastOffsetLeft = -0.09f;
+    [SerializeField] private float _groundRaycastOffsetRight = 0.13f;
     [SerializeField] private bool _isOnGround;
 
     private bool _canJump => Input.GetButton("Jump") && _isOnGround;
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = false;
         }
-        
+
     }
 
     private void AnimateRunIdle()
@@ -77,7 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         CheckCollisions();
         MoveCharacter();
-        
+
         if (_isOnGround)
         {
             ApplyGroundLinearDrag();
@@ -145,18 +147,62 @@ public class PlayerController : MonoBehaviour
 
     private void CheckCollisions()
     {
-        _isOnGround = Physics2D.Raycast(
-            transform.position,
+        bool leftOnGround = Physics2D.Raycast(
+            new Vector3(
+                   transform.position.x + _groundRaycastOffsetRight,
+                   transform.position.y,
+                   transform.position.z
+            ),
             Vector2.down,
             _groundRaycastLength,
             _groundLayer
         );
+
+        bool rightOnGround = Physics2D.Raycast(
+             new Vector3(
+                   transform.position.x + _groundRaycastOffsetLeft,
+                   transform.position.y,
+                   transform.position.z
+            ),
+            Vector2.down,
+            _groundRaycastLength,
+            _groundLayer
+        );
+
+        _isOnGround = leftOnGround || rightOnGround;
+
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _groundRaycastLength);
+        // Draw Raycasts
+        Gizmos.DrawLine(
+            new Vector3(
+                   transform.position.x + _groundRaycastOffsetRight,
+                   transform.position.y,
+                   transform.position.z
+            ),
+            new Vector3(
+                   transform.position.x + _groundRaycastOffsetRight,
+                   transform.position.y - _groundRaycastLength,
+                   transform.position.z
+            )
+        );
+
+        Gizmos.DrawLine(
+            new Vector3(
+                   transform.position.x + _groundRaycastOffsetLeft,
+                   transform.position.y,
+                   transform.position.z
+            ),
+            new Vector3(
+                   transform.position.x + _groundRaycastOffsetLeft,
+                   transform.position.y - _groundRaycastLength,
+                   transform.position.z
+            )
+        );
+
     }
 
 }

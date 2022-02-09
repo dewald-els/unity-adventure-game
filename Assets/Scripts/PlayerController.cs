@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Components")]
     private Rigidbody2D _rb;
+    private Transform _respawnPoint;
 
     [Header("Movement")]
     [SerializeField] private float _moveAcceleration = 40.0f;
@@ -36,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _respawnPoint = GameObject.FindGameObjectWithTag("Respawn").transform;
+        transform.position = _respawnPoint.position;
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _animator = gameObject.GetComponent<Animator>();
     }

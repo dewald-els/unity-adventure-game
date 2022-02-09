@@ -27,8 +27,6 @@ public class SpikeHeadPatrol : MonoBehaviour
     private void Patrol()
     {
         Transform goal = points[nextPointIndex];
-
-        // transform.position = Vector2.Lerp(transform.position, goal.position, moveSpeed * Time.fixedDeltaTime);
         transform.position = Vector2.MoveTowards(transform.position, goal.position, moveSpeed * Time.fixedDeltaTime);
         if (Vector2.Distance(transform.position, goal.position) < 0.6)
         {

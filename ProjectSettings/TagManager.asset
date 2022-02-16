@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DeathZone
   - Timer
+  - Enemy
   layers:
   - Default
   - TransparentFX
